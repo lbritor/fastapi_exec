@@ -1,3 +1,4 @@
+from re import I
 import uuid
 from fastapi import FastAPI, Body
 from pydantic import BaseModel, Field
@@ -28,11 +29,7 @@ def listar_notas():
 
 @app.put('/alterar/{id}')
 def atualizar_notas(id:uuid.UUID, nota: DadosNotas = Body()):
-    for id in nota:
-        if id == notas[0]:
-            return notas[0]
-    notas[0] = nota
-    return nota
+    return
     
 @app.delete('/deletar/{id}')
 def deletar_notas(id: uuid.UUID):
@@ -43,7 +40,7 @@ def deletar_notas(id: uuid.UUID):
 
 @app.get('/notas/{id}')
 def buscar_id(id: uuid.UUID):
-    for id in range(len(notas)):
-        if notas[id] == id:
-            return id
-    return notas[id]
+    for i in range(len(notas)):
+        if notas[i].id == id:
+            return notas[i]
+    return None
