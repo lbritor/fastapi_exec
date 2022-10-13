@@ -1,4 +1,3 @@
-from re import I
 import uuid
 from fastapi import FastAPI, Body, HTTPException
 from pydantic import BaseModel, Field
@@ -31,25 +30,21 @@ def listar_notas():
 def atualizar_notas(id:uuid.UUID, nota: DadosNotas = Body()):
     for i in range(len(notas)):
         if notas[i].id == id:
-            id_encontrado = i
-        if id not in notas:
-            raise HTTPException(status_code=404, detail='ID not found')
-        notas[id_encontrado] = nota
-        return notas[id_encontrado]
+            notas[i] = nota
+            notas[i].id = id
+            return notas[i]
+    raise HTTPException(status_code=404, detail='ID not found')
     
+
 @app.delete('/deletar/{id}')
 def deletar_notas(id: uuid.UUID):
     for i in range(len(notas)):
         if notas[i].id == id:
-            id_del = i
-            notas.pop(id_del)
-            return notas[id_del]
-
-
+            return notas.pop(i)
+            
 @app.get('/notas/{id}')
 def buscar_id(id: uuid.UUID):
     for i in range(len(notas)):
         if notas[i].id == id:
             return notas[i]
-        if id not in notas:
-            raise HTTPException(status_code=404, detail="ID not found")
+    raise HTTPException(status_code=404, detail="ID not found")
